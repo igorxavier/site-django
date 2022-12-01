@@ -1,3 +1,5 @@
+import json
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -5,8 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
 from django.db.models.query_utils import Q
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.views.decorators.csrf import csrf_exempt
 
 from . import forms
 from .models import Clientes
@@ -20,70 +23,138 @@ def kiwify_test_dm(request, mac):
 
     # Procura o mac e retorna uma resposta
 
-    # if ( 0 < $pod_cliente_video_maker->total() ) {
-    #     http_response_code(200);
-    #     $arr = [
-    #         'register' => true,
-    #         'version' => '0.0.8',
-    #         'url'=>'https://robozinhos.com.br/20fjnct59ghj39'];
-    #     echo json_encode($arr);
-    # }else{
-    #     http_response_code(500);
-    #     $arr = array('register' => false);
-    #     echo json_encode($arr);
-    # };
+    cliente = Clientes.objects.filter(Q(mac1=mac) | Q(mac2=mac) | Q(mac3=mac) | Q(mac4=mac) | Q(mac5=mac) | Q(mac6=mac)).first()
+
+    if cliente:
+        status = 200
+        data = {
+            'register': True,
+            'version': '0.0.1',
+            'url': 'https://robozinhos.com.br/83lrfhsr7jfk9'
+            }
+    else:
+        status = 500
+        data = {
+            'register': False,
+            }
 
     print('Testa se o mac existe')
+
+    return JsonResponse(data=data, status=status)
+
 
 def kiwify_test(request, mac):
     print('Testa se o mac existe - test')
 
-def kiwify_dm(request, mac):
+
+@csrf_exempt
+def kiwify_dm(request):
     print('Recebe um post do download machine da kiwify e cadastra o email')
 
-def kiwify_vmp(request, mac):
+
+@csrf_exempt
+def kiwify_vmp(request):
     print('Recebe um post do vídeo machine pro da kiwify e cadastra o email')
 
 
 def hotmart_test(request, mac):
 
-    # Procura o mac e retorna uma resposta
+    cliente = Clientes.objects.filter(Q(mac1=mac) | Q(mac2=mac) | Q(mac3=mac) | Q(mac4=mac) | Q(mac5=mac) | Q(mac6=mac)).first()
 
-    # if ( 0 < $pod_cliente_video_maker->total() ) {
-    #     http_response_code(200);
-    #     $arr = [
-    #         'register' => true,
-    #         'version' => '0.0.8',
-    #         'url'=>'https://robozinhos.com.br/20fjnct59ghj39'];
-    #     echo json_encode($arr);
-    # }else{
-    #     http_response_code(500);
-    #     $arr = array('register' => false);
-    #     echo json_encode($arr);
-    # };
+    if cliente:
+        status = 200
+        data = {
+            'register': True,
+            'version': '0.0.8',
+            'url': 'https://robozinhos.com.br/20fjnct59ghj39'
+            }
+    else:
+        status = 500
+        data = {
+            'register': False,
+            }
 
     print('Testa se o mac existe')
 
-
+@csrf_exempt
 def hotmart_rdm(request, mac):
     print('Recebe um post do download machine da Hotmart e cadastra o email')
 
+@csrf_exempt
 def hotmart_rvm(request, mac):
     print('Recebe um post do vídeo machine pro da Hotmart e cadastra o email')
 
 
-def download_machine_post(request, mac):
-    print('Recebe um post json direto do robozinho, verifica se o email já está no banco e cadastra o mac')
+@csrf_exempt
+def download_machine_post(request):
 
-def video_maker_test_post(request, mac):
-    print('Recebe um post json direto do robozinho, verifica se o email já está no banco e cadastra o mac')
+    print('passou na tentativa de pegar o post')
+    received_json_data = json.loads(request.body.decode("utf-8"))
+
+    print(received_json_data)
+
+    if received_json_data['nome'] and received_json_data['email'] and received_json_data['codigo']:
+
+        cliente = Clientes.objects.filter(Q(email_compra=received_json_data['email'])).filter(Q(mac1__exact='') | Q(mac1__isnull=True)).first()
 
 
+        if cliente:
+            cliente.nome = received_json_data['nome']
+            cliente.mac1 = received_json_data['codigo']
+            cliente.save()
+            
+            status = 200
+            data = {
+                'success': True,
+                }
+        else:
+            status = 500
+            data = {
+                'success': False,
+                }
+    else:
+        status = 500
+        data = {
+            'success': False,
+            }
+
+    return JsonResponse(data=data, status=status)
 
 
+@csrf_exempt
+def video_maker_test_post(request):
+
+    print('passou na tentativa de pegar o post')
+    received_json_data = json.loads(request.body.decode("utf-8"))
+
+    print(received_json_data)
+
+    if received_json_data['nome'] and received_json_data['email'] and received_json_data['codigo']:
+
+        cliente = Clientes.objects.filter(Q(email_compra=received_json_data['email'])).filter(Q(mac1__exact='') | Q(mac1__isnull=True)).first()
 
 
+        if cliente:
+            cliente.nome = received_json_data['nome']
+            cliente.mac1 = received_json_data['codigo']
+            cliente.save()
+            
+            status = 200
+            data = {
+                'success': True,
+                }
+        else:
+            status = 500
+            data = {
+                'success': False,
+                }
+    else:
+        status = 500
+        data = {
+            'success': False,
+            }
 
+    return JsonResponse(data=data, status=status)
 
 
 

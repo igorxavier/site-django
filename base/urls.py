@@ -26,7 +26,7 @@ handler403 = 'clientes.views.custom_permission_denied_view'
 handler400 = 'clientes.views.custom_bad_request_view'
 
 urlpatterns = [
-    path("", views.frontpage, name="frontpage"),
+    path('', include('clientes.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
     path('admin/', admin.site.urls),
 ]
