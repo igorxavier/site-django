@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+
+  # web container, with django + gunicorn
+  django_gunicorn_viazapi:
+    container_name: django_gunicorn_viazapi
+    restart: always
+    volumes:
+      - ../../.:/home/app/web
+    env_file:
+      - ../../.env
+    build:
+      context: ../../.
+    networks:
+      - nginx_network
+
+  # reverse proxy container (nginx)
+  nginx:
+    container_name: nginx_viazapi
+    restart: always
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ../../static:/home/app/web/static
+      - ../../media:/home/app/web/media
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - nginx_network
+    depends_on:
+      - django_gunicorn_viazapi
+
+networks:
+  nginx_network:
+    name: rede_nginx
+
+volumes:
+  static:
+  media:

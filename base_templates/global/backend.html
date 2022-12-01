@@ -1,0 +1,55 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Painel | {% block titulo %}{% endblock titulo %}</title>
+    
+    {% tailwind_css %}
+    <link rel="stylesheet" href="{% static 'global/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'global/css/slimselect.min.css' %}">
+    <base href="{% static 'global/js/simple-web-audio-recorder/' %}">
+    <script src="{% static 'global/js/htmx.min.js' %}"></script>
+    <script src="{% static 'global/js/slimselect.min.js' %}"></script>
+</head>
+<body>
+    <div hx-sse="connect:{% url 'painel:stream' %}?valor={{request.GET.valor}}">
+        
+        {% include 'painel/partials/left.html' %}
+        <div class="flex w-full h-full bg-gray-200">
+            {% include 'painel/partials/topo.html' %}
+            
+            {% block conteudo %}{% endblock conteudo %}
+            
+            {% include 'painel/partials/rodape.html' %}
+        </div>
+    </div>
+    <script src="{% static 'global/js/Sortable.min.js' %}"></script>
+    <script>
+            function closeModal() {
+                var container = document.getElementById("modals-here")
+                var backdrop = document.getElementById("modal-backdrop")
+                var modal = document.getElementById("modal")
+                
+                modal.classList.remove("show")
+                backdrop.classList.remove("show")
+                
+                setTimeout(function() {
+                    container.removeChild(backdrop)
+                    container.removeChild(modal)
+                }, 200)
+            }
+            
+            const btn = document.querySelector("button.mobile-menu-button");
+            const menu = document.querySelector(".mobile-menu");
+            
+            btn.addEventListener("click", () => {
+                menu.classList.toggle("hidden");
+            });
+        </script>
+    </body>
+    </html>
