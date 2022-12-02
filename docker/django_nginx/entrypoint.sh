@@ -10,4 +10,4 @@ service cron restart
 
 DJANGO_SUPERUSER_PASSWORD=$SUPER_USER_PASSWORD python manage.py createsuperuser --username $SUPER_USER_NAME --email $SUPER_USER_EMAIL --noinput
 
-gunicorn base.wsgi:application -b :8000 --timeout 120 --workers=3 --threads=3 --worker-connections=1000 --worker-class=gevent
+gunicorn base.wsgi:application -b :8081 --timeout 120 --workers=3 --threads=3 --worker-connections=1000 --worker-class=gevent
