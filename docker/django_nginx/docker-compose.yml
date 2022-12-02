@@ -16,25 +16,25 @@ services:
       - nginx_network
 
 
-#   nginx:
-#     container_name: nginx_viazapi
-#     restart: always
-#     image: nginx:latest
-#     ports:
-#       - "80:80"
-#     volumes:
-#       - ../../static:/home/app/web/static
-#       - ../../media:/home/app/web/media
-#       - ./default.conf:/etc/nginx/conf.d/default.conf
-#     networks:
-#       - nginx_network
-#     depends_on:
-#       - django_gunicorn_viazapi
+  nginx:
+    container_name: nginx_viazapi
+    restart: always
+    image: nginx:latest
+    ports:
+      - "8888:88"
+    volumes:
+      - ../../static:/home/app/web/static
+      - ../../media:/home/app/web/media
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - nginx_network
+    depends_on:
+      - django_gunicorn_viazapi
 
 networks:
   nginx_network:
     name: rede_nginx
 
-# volumes:
-#   static:
-#   media:
+volumes:
+  static:
+  media:
