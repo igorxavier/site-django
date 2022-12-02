@@ -119,6 +119,8 @@ def hotmart_test(request, mac):
 
     print('Testa se o mac existe')
 
+    return JsonResponse(data=data, status=status)
+
 @csrf_exempt
 def hotmart_rdm(request):
 
