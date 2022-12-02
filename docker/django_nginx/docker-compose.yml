@@ -12,8 +12,8 @@ services:
       - ../../.env
     build:
       context: ../../.
-#     networks:
-#       - nginx_network
+    networks:
+      - nginx_network
 
 
 #   nginx:
@@ -31,9 +31,9 @@ services:
 #     depends_on:
 #       - django_gunicorn_viazapi
 
-# networks:
-#   nginx_network:
-#     name: rede_nginx
+networks:
+  nginx_network:
+    name: rede_nginx
 
 # volumes:
 #   static:
