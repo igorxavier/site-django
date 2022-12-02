@@ -1,4 +1,6 @@
+import hmac
 import json
+from hashlib import sha1
 
 from django.conf import settings
 from django.contrib import messages
@@ -43,18 +45,59 @@ def kiwify_test_dm(request, mac):
     return JsonResponse(data=data, status=status)
 
 
-def kiwify_test(request, mac):
-    print('Testa se o mac existe - test')
-
 
 @csrf_exempt
 def kiwify_dm(request):
-    print('Recebe um post do download machine da kiwify e cadastra o email')
+    
+    # Validar token da Kiwify
+    token = "angcqay2hrm".encode('utf-8')
+
+    received_json_data = request.body.decode('utf-8')
+
+    hexa = hmac.new(token, received_json_data.encode('utf-8'), sha1).hexdigest()
+
+    if hexa == request.GET.get('signature', ''):
+
+        loads_received_json_data = json.loads(received_json_data)
+
+        # json_formatted_str = json.dumps(loads_received_json_data, indent=2)
+
+        # print(json_formatted_str)        
+
+        cliente = Clientes.objects.create(email=loads_received_json_data.get("Customer").get("email"))
+        cliente.save()
+
+        return JsonResponse(data={'status': 'ok'}, status=200)
+    else:
+        print('Token não confere')
+        return JsonResponse(data={'error': 'Incorrect signature'}, status=400)
 
 
 @csrf_exempt
 def kiwify_vmp(request):
-    print('Recebe um post do vídeo machine pro da kiwify e cadastra o email')
+
+    # Validar token da Kiwify
+    token = "l1egqzkfupy".encode('utf-8')
+
+    received_json_data = request.body.decode('utf-8')
+
+    hexa = hmac.new(token, received_json_data.encode('utf-8'), sha1).hexdigest()
+
+    if hexa == request.GET.get('signature', ''):
+
+        loads_received_json_data = json.loads(received_json_data)
+
+        # json_formatted_str = json.dumps(loads_received_json_data, indent=2)
+
+        # print(json_formatted_str)        
+
+        cliente = Clientes.objects.create(email=loads_received_json_data.get("Customer").get("email"))
+        cliente.save()
+
+        return JsonResponse(data={'status': 'ok'}, status=200)
+    else:
+        print('Token não confere')
+        return JsonResponse(data={'error': 'Incorrect signature'}, status=400)
 
 
 def hotmart_test(request, mac):
@@ -77,12 +120,62 @@ def hotmart_test(request, mac):
     print('Testa se o mac existe')
 
 @csrf_exempt
-def hotmart_rdm(request, mac):
-    print('Recebe um post do download machine da Hotmart e cadastra o email')
+def hotmart_rdm(request):
+
+    if request.POST.get("hottok") == 'ysewXlAZI1iHdUFqC4ZcV1J5RLhiVe518471':
+        print('Passou no post')
+        cliente = Clientes.objects.create(email=request.POST.get('email'))
+        cliente.save()
+
+        return JsonResponse(data={'status': 'ok'}, status=200)
+
+    received_json_data = request.body.decode('utf-8')
+
+    loads_received_json_data = json.loads(received_json_data)
+
+    json_formatted_str = json.dumps(loads_received_json_data, indent=2)
+    
+    print(json_formatted_str)
+
+    if loads_received_json_data.get("hottok") == 'ysewXlAZI1iHdUFqC4ZcV1J5RLhiVe518471':        
+
+        cliente = Clientes.objects.create(email=loads_received_json_data.get("data").get("buyer").get('email'))
+        cliente.save()
+
+        return JsonResponse(data={'status': 'ok'}, status=200)
+
+    else:
+        print('Token não confere')
+        return JsonResponse(data={'error': 'hottok incorreto'}, status=400)
 
 @csrf_exempt
-def hotmart_rvm(request, mac):
-    print('Recebe um post do vídeo machine pro da Hotmart e cadastra o email')
+def hotmart_rvm(request):
+
+    if request.POST.get("hottok") == 'ysewXlAZI1iHdUFqC4ZcV1J5RLhiVe518471':
+        print('Passou no post')
+        cliente = Clientes.objects.create(email=request.POST.get('email'))
+        cliente.save()
+
+        return JsonResponse(data={'status': 'ok'}, status=200)
+
+    received_json_data = request.body.decode('utf-8')
+
+    loads_received_json_data = json.loads(received_json_data)
+
+    json_formatted_str = json.dumps(loads_received_json_data, indent=2)
+    
+    print(json_formatted_str)
+
+    if loads_received_json_data.get("hottok") == 'ysewXlAZI1iHdUFqC4ZcV1J5RLhiVe518471':        
+
+        cliente = Clientes.objects.create(email=loads_received_json_data.get("data").get("buyer").get('email'))
+        cliente.save()
+
+        return JsonResponse(data={'status': 'ok'}, status=200)
+
+    else:
+        print('Token não confere')
+        return JsonResponse(data={'error': 'hottok incorreto'}, status=400)
 
 
 @csrf_exempt
@@ -95,7 +188,7 @@ def download_machine_post(request):
 
     if received_json_data['nome'] and received_json_data['email'] and received_json_data['codigo']:
 
-        cliente = Clientes.objects.filter(Q(email_compra=received_json_data['email'])).filter(Q(mac1__exact='') | Q(mac1__isnull=True)).first()
+        cliente = Clientes.objects.filter(Q(email=received_json_data['email'])).filter(Q(mac1__exact='') | Q(mac1__isnull=True)).first()
 
 
         if cliente:
@@ -131,7 +224,7 @@ def video_maker_test_post(request):
 
     if received_json_data['nome'] and received_json_data['email'] and received_json_data['codigo']:
 
-        cliente = Clientes.objects.filter(Q(email_compra=received_json_data['email'])).filter(Q(mac1__exact='') | Q(mac1__isnull=True)).first()
+        cliente = Clientes.objects.filter(Q(email=received_json_data['email'])).filter(Q(mac1__exact='') | Q(mac1__isnull=True)).first()
 
 
         if cliente:

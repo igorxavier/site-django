@@ -7,8 +7,9 @@ app_name = 'clientes'
 
 urlpatterns = [
     path("", views.frontpage, name="frontpage"),
+
+    
     path('kiwify-test-dm/<str:mac>', views.kiwify_test_dm),
-    path('kiwify-test/<str:mac>', views.kiwify_test),
     path('kiwify-dm', views.kiwify_dm),
     path('kiwify-vmp', views.kiwify_vmp),
 
