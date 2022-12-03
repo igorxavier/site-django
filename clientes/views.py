@@ -18,8 +18,11 @@ from .models import Clientes
 
 # Create your views here.
 
-def frontpage(request):
-    return render(request, 'clientes/pages/frontpage.html')
+def robo_video_maker(request):
+    return render(request, 'clientes/pages/video_maker.html')
+
+def download_turbo_list(request):
+    return render(request, 'clientes/pages/download_turbo_list.html')
 
 def kiwify_test_dm(request, mac):
 

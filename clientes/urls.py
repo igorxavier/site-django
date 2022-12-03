@@ -6,7 +6,9 @@ from . import views
 app_name = 'clientes'
 
 urlpatterns = [
-    path("", views.frontpage, name="frontpage"),
+    path("", views.robo_video_maker, name="robo_video_maker"),
+    path("robo-video-maker", views.robo_video_maker, name="robo_video_maker"),
+    path("download-turbo-list", views.download_turbo_list, name="download_turbo_list"),
 
     
     path('kiwify-test-dm/<str:mac>', views.kiwify_test_dm),
