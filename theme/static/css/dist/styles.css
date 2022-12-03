@@ -1286,4 +1286,9 @@ select {
   .lg\:w-2\/3 {
     width: 66.666667%;
   }
+
+  .lg\:text-8xl {
+    font-size: 6rem;
+    line-height: 1;
+  }
 }
