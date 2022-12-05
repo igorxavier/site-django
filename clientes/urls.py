@@ -6,7 +6,7 @@ from . import views
 app_name = 'clientes'
 
 urlpatterns = [
-    path("", views.robo_video_maker, name="robo_video_maker"),
+    path("", views.frontpage, name="frontpage"),
     path("robo-video-maker", views.robo_video_maker, name="robo_video_maker"),
     path("download-turbo-list", views.download_turbo_list, name="download_turbo_list"),
 
