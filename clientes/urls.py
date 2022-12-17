@@ -9,6 +9,7 @@ urlpatterns = [
     path("", views.frontpage, name="frontpage"),
     path("robo-video-maker", views.robo_video_maker, name="robo_video_maker"),
     path("download-turbo-list", views.download_turbo_list, name="download_turbo_list"),
+    path("video-machine-pro", views.video_machine_pro, name="video_machine_pro"),
 
     
     path('kiwify-test-dm/<str:mac>', views.kiwify_test_dm),

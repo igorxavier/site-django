@@ -27,6 +27,9 @@ def robo_video_maker(request):
 def download_turbo_list(request):
     return render(request, 'clientes/pages/download_turbo_list.html')
 
+def video_machine_pro(request):
+    return render(request, 'clientes/pages/video_machine_pro.html')
+
 def kiwify_test_dm(request, mac):
 
     # Procura o mac e retorna uma resposta
