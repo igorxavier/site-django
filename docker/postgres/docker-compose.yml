@@ -25,6 +25,7 @@ services:
       - nginx_network
 
   pgbouncer:
+    container_name: pgbouncer
     image: edoburu/pgbouncer
     env_file:
       - ../../.env

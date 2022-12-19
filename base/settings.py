@@ -101,6 +101,7 @@ DATABASES = {
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': os.getenv('HOSTPG'),
         'DISABLE_SERVER_SIDE_CURSORS': True,
+        'PORT': os.getenv('ALT_PORT_PG', '5432'),
     }
 }
 
